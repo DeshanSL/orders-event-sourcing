@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  orders.api:
+    image: ${DOCKER_REGISTRY-}ordersapi
+    build:
+      context: .
+      dockerfile: src/Orders.Api/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=orders.events.db;Port=5432;Database=orders_db;
+  orders.events.db:
+    image: postgres
+    container_name: orders.events.db
+    ports:
+        - "5433:5432" 
+    environment:
+        POSTGRES_DB: orders_db 
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+    volumes:
+       - postgres_data:/var/lib/postgresql/data 
+
+volumes:
+  postgres_data:
